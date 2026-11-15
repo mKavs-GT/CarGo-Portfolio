@@ -1,0 +1,8 @@
+.git
+.github
+*.backup
+*.lazy_backup
+*.carwash_backup
+*.video_batch_backup
+cargo/services/*.mp4
+cargo/*.mp4

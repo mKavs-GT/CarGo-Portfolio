@@ -103,6 +103,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 6. Booking forms submission handlers with live feedback
+    const today = new Date().toISOString().split('T')[0];
+    const serviceDateInput = document.getElementById('service-date');
+    const rentStartDateInput = document.getElementById('rent-start-date');
+    const rentEndDateInput = document.getElementById('rent-end-date');
+
+    if (serviceDateInput) serviceDateInput.setAttribute('min', today);
+    if (rentStartDateInput) {
+        rentStartDateInput.setAttribute('min', today);
+        rentStartDateInput.addEventListener('change', () => {
+            if (rentEndDateInput) {
+                rentEndDateInput.setAttribute('min', rentStartDateInput.value || today);
+                if (rentEndDateInput.value && rentEndDateInput.value < rentStartDateInput.value) {
+                    rentEndDateInput.value = rentStartDateInput.value;
+                }
+            }
+        });
+    }
+    if (rentEndDateInput) rentEndDateInput.setAttribute('min', today);
+
     const serviceForm = document.getElementById('service-form');
     const serviceFeedback = document.getElementById('service-feedback');
     if (serviceForm && serviceFeedback) {
@@ -176,4 +195,88 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // 8. Viewport-Aware Lazy Loading & Playback Control
+    const lazyVideos = document.querySelectorAll('video.lazy-video');
+    const allVideos = document.querySelectorAll('video');
+
+    if ('IntersectionObserver' in window) {
+        // Observer 1: Lazy load sources when video is within 300px of viewport
+        const videoLoadObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const video = entry.target;
+                    const sources = video.querySelectorAll('source[data-src]');
+                    
+                    sources.forEach(source => {
+                        source.src = source.getAttribute('data-src');
+                        source.removeAttribute('data-src');
+                    });
+
+                    if (video.hasAttribute('data-src')) {
+                        video.src = video.getAttribute('data-src');
+                        video.removeAttribute('data-src');
+                    }
+
+                    video.load();
+                    video.dataset.loaded = 'true';
+                    observer.unobserve(video);
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '300px 0px',
+            threshold: 0
+        });
+
+        lazyVideos.forEach(video => {
+            videoLoadObserver.observe(video);
+        });
+
+        // Observer 2: Viewport Playback Controller (pause when outside viewport, play when visible)
+        const videoPlaybackObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                const isAutoplay = video.hasAttribute('autoplay');
+
+                if (entry.isIntersecting) {
+                    if (isAutoplay && (video.dataset.loaded === 'true' || !video.classList.contains('lazy-video'))) {
+                        const playPromise = video.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(() => {});
+                        }
+                    }
+                } else {
+                    if (!video.paused) {
+                        video.pause();
+                    }
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '50px 0px',
+            threshold: 0.05
+        });
+
+        allVideos.forEach(video => {
+            videoPlaybackObserver.observe(video);
+        });
+    } else {
+        // Fallback for browsers without IntersectionObserver
+        lazyVideos.forEach(video => {
+            const sources = video.querySelectorAll('source[data-src]');
+            sources.forEach(source => {
+                source.src = source.getAttribute('data-src');
+                source.removeAttribute('data-src');
+            });
+            if (video.hasAttribute('data-src')) {
+                video.src = video.getAttribute('data-src');
+                video.removeAttribute('data-src');
+            }
+            video.load();
+            if (video.hasAttribute('autoplay')) {
+                video.play().catch(() => {});
+            }
+        });
+    }
 });
