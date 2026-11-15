@@ -196,6 +196,78 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // 7b. Mobile Navigation Drawer Toggle & Interaction
+    const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+    const mobileNavClose = document.getElementById('mobile-nav-close');
+    const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+    const navLinksContainer = document.getElementById('nav-links');
+    const mobileNavLinks = document.querySelectorAll('.buylix-navbar .nav-links a');
+
+    function openMobileMenu() {
+        if (!navLinksContainer) return;
+        navLinksContainer.classList.add('mobile-active');
+        if (mobileNavOverlay) mobileNavOverlay.classList.add('mobile-active');
+        if (mobileNavToggle) {
+            mobileNavToggle.classList.add('open');
+            mobileNavToggle.setAttribute('aria-expanded', 'true');
+        }
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+        if (!navLinksContainer) return;
+        navLinksContainer.classList.remove('mobile-active');
+        if (mobileNavOverlay) mobileNavOverlay.classList.remove('mobile-active');
+        if (mobileNavToggle) {
+            mobileNavToggle.classList.remove('open');
+            mobileNavToggle.setAttribute('aria-expanded', 'false');
+        }
+        document.body.style.overflow = '';
+    }
+
+    if (mobileNavToggle) {
+        mobileNavToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = navLinksContainer && navLinksContainer.classList.contains('mobile-active');
+            if (isOpen) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
+    }
+
+    if (mobileNavClose) {
+        mobileNavClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeMobileMenu();
+        });
+    }
+
+    if (mobileNavOverlay) {
+        mobileNavOverlay.addEventListener('click', closeMobileMenu);
+    }
+
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 992) {
+                closeMobileMenu();
+            }
+        });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navLinksContainer && navLinksContainer.classList.contains('mobile-active')) {
+            closeMobileMenu();
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 992 && navLinksContainer && navLinksContainer.classList.contains('mobile-active')) {
+            closeMobileMenu();
+        }
+    });
+
     // 8. Viewport-Aware Lazy Loading & Playback Control
     const lazyVideos = document.querySelectorAll('video.lazy-video');
     const allVideos = document.querySelectorAll('video');

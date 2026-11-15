@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Velocity Auto | CarGo - Luxury & High Performance Automotive Hub</title>
     <meta name="description" content="Explore Velocity Auto & CarGo: Premium vehicle rentals, precision auto services, performance parts, and custom detailing.">
     
@@ -44,16 +44,32 @@
             <img src="logo.jpg" alt="CarGo Velocity Auto Logo" class="logo-img">
             <span>CarGo</span>
         </a>
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-links">
+            <li class="mobile-nav-header">
+                <div class="mobile-nav-brand">
+                    <img src="logo.jpg" alt="CarGo Logo" class="mobile-logo-img">
+                    <span>CarGo</span>
+                </div>
+                <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close navigation">&times;</button>
+            </li>
             <li><a href="#home" class="active">Home</a></li>
             <li><a href="#vehicles">Rentals</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#parts">Parts</a></li>
             <li><a href="#care">Detailing</a></li>
             <li><a href="#booking">Book Now</a></li>
+            <li class="mobile-nav-footer">
+                <a href="#booking" class="mobile-btn-contact">Book Service</a>
+            </li>
         </ul>
         <a href="#booking" class="btn-contact">Book Service</a>
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
     </nav>
+    <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
 
     <!-- Hero Section -->
     <section class="buylix-hero" id="home">
@@ -533,6 +549,10 @@
                     <li>Mon - Sat: 8:00 AM - 8:00 PM</li>
                 </ul>
             </div>
+        </div>
+        <div class="container-1200 footer-bottom-bar">
+            <p>&copy; 2026 CarGo Velocity Auto. All rights reserved.</p>
+            <a href="#home" class="footer-back-to-top" title="Back to top">↑ Back to top</a>
         </div>
     </footer>
 
