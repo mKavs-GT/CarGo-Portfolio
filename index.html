@@ -318,7 +318,7 @@
                     <div class="d3-discount-info">
                         <span class="d3-desc">Custom Alloy Wheels</span>
                         <h4>30% Off</h4>
-                        <a href="#booking" class="d3-link">Order Now</a>
+                        <a href="#booking" class="d3-link" data-part-name="Custom Alloy Wheels Kit (30% Off)" data-part-price="$1,015.00">Order Now</a>
                     </div>
                 </div>
                 <div class="d3-discount-card">
@@ -330,7 +330,7 @@
                     <div class="d3-discount-info">
                         <span class="d3-desc">Ceramic Brake Kits</span>
                         <h4>40% Off</h4>
-                        <a href="#booking" class="d3-link">Order Now</a>
+                        <a href="#booking" class="d3-link" data-part-name="Ceramic Brake Kit (40% Off)" data-part-price="$468.00">Order Now</a>
                     </div>
                 </div>
                 <div class="d3-discount-card">
@@ -342,7 +342,7 @@
                     <div class="d3-discount-info">
                         <span class="d3-desc">Turbo & Engine Mods</span>
                         <h4>50% Off</h4>
-                        <a href="#booking" class="d3-link">Order Now</a>
+                        <a href="#booking" class="d3-link" data-part-name="Turbo & Engine Mod Package (50% Off)" data-part-price="$490.00">Order Now</a>
                     </div>
                 </div>
             </div>
@@ -361,24 +361,28 @@
                     <h4>Forged 20" Alloy Wheels</h4>
                     <p>Velocity Track Series</p>
                     <span class="d3-price">$1,450.00</span>
+                    <button type="button" class="cargo-part-btn" data-part-name="Forged 20" Alloy Wheels" data-part-price="$1,450.00">Order Part</button>
                 </div>
                 <div class="d3-product-card" data-category="brakes">
                     <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=400&auto=format&fit=crop" alt="Ceramic Brakes">
                     <h4>Carbon Ceramic Brake Rotors</h4>
                     <p>Brembo Pro Spec</p>
                     <span class="d3-price">$780.00</span>
+                    <button type="button" class="cargo-part-btn" data-part-name="Carbon Ceramic Brake Rotors" data-part-price="$780.00">Order Part</button>
                 </div>
                 <div class="d3-product-card" data-category="engine">
                     <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=400&auto=format&fit=crop" alt="Turbo Kit">
                     <h4>Twin-Scroll Turbocharger</h4>
                     <p>Garrett Boost Series</p>
                     <span class="d3-price">$980.00</span>
+                    <button type="button" class="cargo-part-btn" data-part-name="Twin-Scroll Turbocharger" data-part-price="$980.00">Order Part</button>
                 </div>
                 <div class="d3-product-card" data-category="engine">
                     <img src="https://images.unsplash.com/photo-1548600916-dc8492f8e845?q=80&w=400&auto=format&fit=crop" alt="Coilovers">
                     <h4>Adjustable Track Coilovers</h4>
                     <p>KW Suspension Pro</p>
                     <span class="d3-price">$620.00</span>
+                    <button type="button" class="cargo-part-btn" data-part-name="Adjustable Track Coilovers" data-part-price="$620.00">Order Part</button>
                 </div>
             </div>
         </div>
@@ -559,6 +563,27 @@
     <!-- Main JavaScript Logic -->
     <script src="app.js"></script>
 
+
+    <!-- CARGO DIALOG MODAL (CONFIRMATION / ACCEPTED) -->
+    <div id="cargo-modal-overlay" class="cargo-modal-overlay">
+        <div class="cargo-modal-card">
+            <button class="cargo-modal-close" id="cargo-modal-close" aria-label="Close dialog">&times;</button>
+            <div class="cargo-modal-icon-wrap" id="cargo-modal-icon">✓</div>
+            <div class="cargo-modal-badge" id="cargo-modal-badge">REQUEST ACCEPTED</div>
+            <h3 class="cargo-modal-title" id="cargo-modal-title">Booking Accepted!</h3>
+            <p class="cargo-modal-desc" id="cargo-modal-desc">Your request has been logged and confirmed by CarGo Operations.</p>
+            <div class="cargo-modal-details" id="cargo-modal-details"></div>
+            <div class="cargo-modal-actions">
+                <button class="cargo-modal-btn" id="cargo-modal-btn">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARGO TOAST -->
+    <div id="cargo-toast" class="cargo-toast">
+        <span id="cargo-toast-icon">ℹ</span>
+        <span id="cargo-toast-msg">Action processed successfully</span>
+    </div>
 </body>
 
 </html>

@@ -6654,3 +6654,211 @@ img.hero-video {
         scroll-behavior: auto !important;
     }
 }
+/* ======================================================== */
+/* 7. CARGO MODERN DIALOG MODAL & TOAST UI                  */
+/* ======================================================== */
+.cargo-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.cargo-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+.cargo-modal-card {
+    background: linear-gradient(145deg, #17191e, #0c0e11);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    max-width: 480px;
+    width: 100%;
+    padding: 36px 30px;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(230, 57, 70, 0.2);
+    transform: scale(0.92) translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cargo-modal-overlay.active .cargo-modal-card {
+    transform: scale(1) translateY(0);
+}
+.cargo-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: #fff;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.cargo-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+.cargo-modal-icon-wrap {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.05) 70%);
+    border: 2px solid #10b981;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: #10b981;
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+}
+.cargo-modal-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #10b981;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+.cargo-modal-title {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+}
+.cargo-modal-desc {
+    color: #9ca3af;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 20px;
+}
+.cargo-modal-details {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 12px;
+}
+.cargo-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding-bottom: 6px;
+}
+.cargo-detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.cargo-detail-label {
+    color: #6b7280;
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+.cargo-detail-val {
+    color: #f3f4f6;
+    font-weight: 600;
+}
+.cargo-detail-val.highlight {
+    color: #10b981;
+    font-weight: 700;
+}
+.cargo-modal-actions {
+    display: flex;
+    gap: 12px;
+}
+.cargo-modal-btn {
+    flex: 1;
+    background: linear-gradient(135deg, #e63946, #c1121f);
+    color: #fff;
+    border: none;
+    padding: 13px 20px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.cargo-modal-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+}
+.cargo-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #111418;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    z-index: 100000;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+.cargo-toast.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+.cargo-part-btn {
+    margin-top: 12px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: block;
+    text-align: center;
+}
+.cargo-part-btn:hover {
+    background: #e63946;
+    border-color: #e63946;
+}

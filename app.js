@@ -122,51 +122,187 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (rentEndDateInput) rentEndDateInput.setAttribute('min', today);
 
+    // --- CARGO DIALOG MODAL & TOAST SYSTEM ---
+    const modalOverlay = document.getElementById('cargo-modal-overlay');
+    const modalClose = document.getElementById('cargo-modal-close');
+    const modalBtn = document.getElementById('cargo-modal-btn');
+    const modalTitle = document.getElementById('cargo-modal-title');
+    const modalDesc = document.getElementById('cargo-modal-desc');
+    const modalBadge = document.getElementById('cargo-modal-badge');
+    const modalDetails = document.getElementById('cargo-modal-details');
+    const modalIcon = document.getElementById('cargo-modal-icon');
+    const toast = document.getElementById('cargo-toast');
+    const toastMsg = document.getElementById('cargo-toast-msg');
+
+    function showCargoDialog(opts) {
+        if (!modalOverlay) return;
+        if (modalBadge) modalBadge.textContent = opts.badge || 'REQUEST ACCEPTED';
+        if (modalTitle) modalTitle.textContent = opts.title || 'Accepted!';
+        if (modalDesc) modalDesc.textContent = opts.message || 'Your submission has been accepted.';
+        if (modalIcon) modalIcon.textContent = opts.icon || '✓';
+        
+        if (modalDetails && opts.details) {
+            modalDetails.innerHTML = opts.details.map(d => `
+                <div class="cargo-detail-row">
+                    <span class="cargo-detail-label">${d.label}</span>
+                    <span class="cargo-detail-val ${d.highlight ? 'highlight' : ''}">${d.value}</span>
+                </div>
+            `).join('');
+            modalDetails.style.display = 'flex';
+        } else if (modalDetails) {
+            modalDetails.style.display = 'none';
+        }
+
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCargoDialog() {
+        if (modalOverlay) {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (modalClose) modalClose.addEventListener('click', closeCargoDialog);
+    if (modalBtn) modalBtn.addEventListener('click', closeCargoDialog);
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeCargoDialog();
+        });
+    }
+
+    let toastTimer;
+    function showCargoToast(msg) {
+        if (!toast) return;
+        if (toastMsg) toastMsg.textContent = msg;
+        toast.classList.add('active');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+            toast.classList.remove('active');
+        }, 3500);
+    }
+
+    // 6. Booking forms submission handlers with live feedback & rich accepted dialog
     const serviceForm = document.getElementById('service-form');
-    const serviceFeedback = document.getElementById('service-feedback');
-    if (serviceForm && serviceFeedback) {
+    if (serviceForm) {
         serviceForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const submitBtn = serviceForm.querySelector('.booking-submit');
             const originalText = submitBtn.innerText;
+            const name = document.getElementById('service-name')?.value || 'Valued Client';
+            const phone = document.getElementById('service-phone')?.value || 'On File';
+            const serviceSelect = document.getElementById('service-select');
+            const serviceName = serviceSelect ? serviceSelect.options[serviceSelect.selectedIndex]?.text : 'General Service';
+            const date = document.getElementById('service-date')?.value || new Date().toISOString().split('T')[0];
+
             submitBtn.disabled = true;
-            submitBtn.innerText = 'Processing...';
+            submitBtn.innerText = 'Connecting to Dispatch...';
 
             setTimeout(() => {
-                serviceFeedback.innerText = '✓ Service booking request received! We will contact you shortly.';
-                serviceFeedback.style.display = 'block';
-                serviceForm.reset();
                 submitBtn.disabled = false;
                 submitBtn.innerText = originalText;
+                serviceForm.reset();
 
-                setTimeout(() => {
-                    serviceFeedback.style.display = 'none';
-                }, 5000);
-            }, 800);
+                const refId = 'CG-SRV-' + Math.floor(100000 + Math.random() * 900000);
+                showCargoDialog({
+                    badge: 'SERVICE BOOKING ACCEPTED',
+                    title: 'Appointment Confirmed!',
+                    message: 'Your service request has been processed and accepted by CarGo Certified Master Technicians.',
+                    details: [
+                        { label: 'Booking Ref', value: refId, highlight: true },
+                        { label: 'Service', value: serviceName },
+                        { label: 'Client', value: name },
+                        { label: 'Contact', value: phone },
+                        { label: 'Scheduled Date', value: date },
+                        { label: 'Status', value: 'Confirmed & Logged', highlight: true }
+                    ]
+                });
+            }, 600);
         });
     }
 
     const rentForm = document.getElementById('rent-form');
-    const rentFeedback = document.getElementById('rent-feedback');
-    if (rentForm && rentFeedback) {
+    if (rentForm) {
         rentForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const submitBtn = rentForm.querySelector('.booking-submit');
             const originalText = submitBtn.innerText;
+            const name = document.getElementById('rent-name')?.value || 'Valued Client';
+            const phone = document.getElementById('rent-phone')?.value || 'On File';
+            const rentSelect = document.getElementById('rent-select');
+            const carType = rentSelect ? rentSelect.options[rentSelect.selectedIndex]?.text : 'Executive Fleet';
+            const startDate = document.getElementById('rent-start-date')?.value || today;
+            const endDate = document.getElementById('rent-end-date')?.value || today;
+
             submitBtn.disabled = true;
-            submitBtn.innerText = 'Processing...';
+            submitBtn.innerText = 'Checking Fleet Availability...';
 
             setTimeout(() => {
-                rentFeedback.innerText = '✓ Vehicle reservation confirmed! Our concierge will reach out to you.';
-                rentFeedback.style.display = 'block';
-                rentForm.reset();
                 submitBtn.disabled = false;
                 submitBtn.innerText = originalText;
+                rentForm.reset();
 
-                setTimeout(() => {
-                    rentFeedback.style.display = 'none';
-                }, 5000);
-            }, 800);
+                const refId = 'CG-RENT-' + Math.floor(100000 + Math.random() * 900000);
+                showCargoDialog({
+                    badge: 'FLEET RESERVATION ACCEPTED',
+                    title: 'Vehicle Reserved!',
+                    message: 'Your vehicle reservation has been accepted into the CarGo active fleet schedule. Key handover ready on arrival.',
+                    details: [
+                        { label: 'Reservation Ref', value: refId, highlight: true },
+                        { label: 'Category', value: carType },
+                        { label: 'Renter', value: name },
+                        { label: 'Contact', value: phone },
+                        { label: 'Rental Period', value: `${startDate} to ${endDate}` },
+                        { label: 'Status', value: 'Pre-Inspected & Staged', highlight: true }
+                    ]
+                });
+            }, 600);
+        });
+    }
+
+    // Part Order Buttons & Discount Links
+    document.querySelectorAll('.cargo-part-btn, [data-part-name]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const partName = btn.getAttribute('data-part-name') || 'High-Performance Component';
+            const partPrice = btn.getAttribute('data-part-price') || 'Calculated at checkout';
+            const orderId = 'CG-PRT-' + Math.floor(100000 + Math.random() * 900000);
+
+            showCargoDialog({
+                badge: 'PART ORDER ACCEPTED',
+                title: 'Order Confirmed!',
+                message: 'Your performance component order has been routed to CarGo Munich Central Warehouse for express fulfillment.',
+                details: [
+                    { label: 'Order ID', value: orderId, highlight: true },
+                    { label: 'Component', value: partName },
+                    { label: 'Amount', value: partPrice },
+                    { label: 'Dispatch Hub', value: 'Munich Trackside Logistics' },
+                    { label: 'Delivery', value: 'Express Air Freight (2-3 Business Days)' },
+                    { label: 'Status', value: 'Accepted & Packing', highlight: true }
+                ]
+            });
+        });
+    });
+
+    // Social Media Button Handlers
+    document.querySelectorAll('.social-btn, .social-icons a').forEach(socialLink => {
+        socialLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const platform = socialLink.getAttribute('title') || 'Social Media';
+            showCargoToast(`Opening official CarGo ${platform} channel...`);
+            setTimeout(() => {
+                showCargoToast(`Connected to CarGo ${platform} community!`);
+            }, 1200);
+        });
+    });
+
+    // Back to top button
+    const backToTop = document.querySelector('.footer-back-to-top');
+    if (backToTop) {
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
